@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Text Matching</title>
+</head>
+<body>
+
+    <h1>Text Matching</h1>
+
+    <form id="myForm">
+        <label for="inputText">Masukkan teks:</label>
+        <input type="text" id="inputText" name="inputText" placeholder="Tuliskan sesuatu">
+
+        <button type="button" onclick="tampilkanTeks()">Proses Teks</button>
+    </form>
+
+    <div id="result">
+        <!-- Hasil akan ditampilkan di sini -->
+    </div>
+
+    <script>
+        function tampilkanTeks() {
+            var teks = document.getElementById("inputText").value;
+            var xhr = new XMLHttpRequest();
+
+            xhr.open("POST", "/process_text", true);
+            xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+
+            xhr.onreadystatechange = function () {
+                if (xhr.readyState === 4 && xhr.status === 200) {
+                    var response = JSON.parse(xhr.responseText);
+                    var resultDiv = document.getElementById("result");
+
+                    resultDiv.innerHTML = "<p>Hasil Label: " + response.result_label + "</p>" +
+                                          "<p>Kemiripan: " + response.similarity + "</p>";
+                }
+            };
+
+            xhr.send("inputText=" + encodeURIComponent(teks));
+        }
+    </script>
+
+</body>
+</html>
